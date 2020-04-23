@@ -77,9 +77,9 @@ impl MemoryMonitor {
         }
     }
     pub fn new() -> Result<MemoryMonitor,i32> {
-        let unit = match cfg!(linux) {
+        let unit = match cfg!(target_os = "linux") {
             true => Unit::Kilo,
-            false => match cfg!(macos) {
+            false => match cfg!(target_os = "macos") {
                 true => Unit::Byte,
                 false => Unit::Unknown,
             },
@@ -96,8 +96,8 @@ impl MemoryMonitor {
         mem
     }
     pub fn hmem(&self) -> String {
-        let mut unit = Unit::Byte;
-        let mut mem: f64 = (self.data.ru_maxrss as f64) * self.unit.as_f64();
+        let mut unit = self.unit;
+        let mut mem: f64 = self.data.ru_maxrss as f64;
         while mem > 600.0 {
             match unit.inc() {
                 Some(un) => {
