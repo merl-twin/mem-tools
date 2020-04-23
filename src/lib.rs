@@ -46,7 +46,7 @@ impl Unit {
     }
 }
 
-struct MemoryMonitor {
+pub struct MemoryMonitor {
     unit: Unit,
     data: libc::rusage,
     tm: std::time::Instant,
